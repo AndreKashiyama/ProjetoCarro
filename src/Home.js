@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import {View, StyleSheet, ScrollView, TextInput, ActivityIndicator} from 'react-native';
+import React, { useState, useEffect } from 'react';
+import {View, StyleSheet, ScrollView, TextInput, ActivityIndicator, TextComponent} from 'react-native';
 
 
 import CarroItem from './CarroItem';
@@ -16,10 +16,18 @@ const App = props => {
 
   const [loading, setLoading] = useState(true)
   const [data, setData] = useState([])
+  const [q,setQ] = useState('')
 
-  console.log('Iniciando')
+
+useEffect(() => {
+  setTimeout(carregadarDados, 2000)
+})
+//  console.log('Iniciando')
 
   const carregadarDados = () => {
+    console.log('Iniciando')
+
+    setData(CarrosDb)
     setLoading(false)
   }
 
@@ -27,19 +35,16 @@ const App = props => {
    // alert(id)
     props.navigation.navigate('Detalhe', {id})
   }
-  let CarrosJsx = [] 
-  for (let key in data){
-    let CarroDb = data[key]
-    CarrosJsx.push(<CarroItem foto = {CarroDb.foto} titulo = {CarroDb.modelo + "/" + CarroDb.ano} 
-    onPress={abrirDetalhe}
-    key={key}/>)
-  }
+  
 
   const jsxCarros = () => (
     <View>
-    <TextInput />
+    <TextInput
+    value={q}
+    onChangeText={setQ}
+     />
   <ScrollView style={styles.container}>
-  {CarrosJsx}
+  {jsxLista()}
   </ScrollView>
   </View>
   )
@@ -50,7 +55,31 @@ const App = props => {
       </View>
   )
 
-  setTimeout(carregadarDados, 2000)
+let dataFiltrado;
+if(q == ''){
+  dataFiltrado = data
+}else{
+  dataFiltrado = []
+  let q2 = q.toUpperCase()
+  for(let key in data){
+    let text = `${data[key].modelo} ${data[key].ano}`
+    if (text.toUpperCase().indexOf(q2) >= 0){
+      dataFiltrado.push(data[key])
+    }
+  }
+}
+const jsxLista = () => {
+  let CarrosJsx = [] 
+  for (let key in dataFiltrado){
+    let CarroDb = dataFiltrado[key]
+    CarrosJsx.push(<CarroItem foto = {CarroDb.foto} titulo = {CarroDb.modelo + "/" + CarroDb.ano} 
+    onPress={abrirDetalhe}
+    key={key}/>)
+  }
+return CarrosJsx;
+}
+
+
   if (loading){
     return jsxLoading()
   }else{
