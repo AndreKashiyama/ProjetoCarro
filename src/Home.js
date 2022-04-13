@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import {View, StyleSheet, ScrollView, TextInput, ActivityIndicator, TextComponent} from 'react-native';
+import {View, StyleSheet, TextInput, ActivityIndicator, FlatList,Text} from 'react-native';
 
 
 import CarroItem from './CarroItem';
@@ -38,16 +38,26 @@ useEffect(() => {
   
 
   const jsxCarros = () => (
-    <View>
+    <View flex={1}>
     <TextInput
     value={q}
     onChangeText={setQ}
      />
-  <ScrollView style={styles.container}>
-  {jsxLista()}
-  </ScrollView>
+     <FlatList
+     data={dataFiltrado}
+     renderItem={item}
+      />
   </View>
   )
+
+  const item = propsItem =>{
+    console.log(propsItem)
+    //return (<Text>{propsItem.item.modelo}</Text>)
+    return (
+   <CarroItem foto = {propsItem.item.foto} titulo = {propsItem.item.modelo + "/" + propsItem.item.ano} 
+        onPress={abrirDetalhe} />
+      )
+    }
 
   const jsxLoading = () => (
     <View> 
@@ -68,16 +78,16 @@ if(q == ''){
     }
   }
 }
-const jsxLista = () => {
-  let CarrosJsx = [] 
-  for (let key in dataFiltrado){
-    let CarroDb = dataFiltrado[key]
-    CarrosJsx.push(<CarroItem foto = {CarroDb.foto} titulo = {CarroDb.modelo + "/" + CarroDb.ano} 
-    onPress={abrirDetalhe}
-    key={key}/>)
-  }
-return CarrosJsx;
-}
+//const jsxLista = () => {
+//  let CarrosJsx = [] 
+//  for (let key in dataFiltrado){
+//   let CarroDb = dataFiltrado[key]
+//    CarrosJsx.push(<CarroItem foto = {CarroDb.foto} titulo = {CarroDb.modelo + "/" + CarroDb.ano} 
+//    onPress={abrirDetalhe}
+//    key={key}/>)
+//  }
+//return CarrosJsx;
+//}
 
 
   if (loading){
