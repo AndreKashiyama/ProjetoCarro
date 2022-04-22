@@ -26,7 +26,7 @@ const styles = StyleSheet.create({
 })
 
 const CarroItem = props => (
-    <TouchableHighlight onPress={() =>props.onPress(props.titulo)}>
+    <TouchableHighlight onPress={() =>props.onPress(props.id)}>
     <View style={styles.container}>
     <Image
         style={styles.foto}

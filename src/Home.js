@@ -3,7 +3,7 @@ import {View, StyleSheet, TextInput, ActivityIndicator, FlatList,Text} from 'rea
 
 
 import CarroItem from './CarroItem';
-import CarrosDb from './CarrosDb';
+import { pegarCarros } from './services/CarroService';
 
 const styles = StyleSheet.create({
   container: {
@@ -25,9 +25,9 @@ useEffect(() => {
 //  console.log('Iniciando')
 
   const carregadarDados = () => {
-    console.log('Iniciando')
+    console.log('carregarDados')
 
-    setData(CarrosDb)
+    setData(pegarCarros())
     setLoading(false)
   }
 
@@ -40,6 +40,7 @@ useEffect(() => {
   const jsxCarros = () => (
     <View flex={1}>
     <TextInput
+    placeholder="Pesquisar"
     value={q}
     onChangeText={setQ}
      />
@@ -54,7 +55,10 @@ useEffect(() => {
     console.log(propsItem)
     //return (<Text>{propsItem.item.modelo}</Text>)
     return (
-   <CarroItem foto = {propsItem.item.foto} titulo = {propsItem.item.modelo + "/" + propsItem.item.ano} 
+   <CarroItem
+    id={propsItem.index}
+    foto = {propsItem.item.foto} 
+    titulo = {propsItem.item.modelo + "/" + propsItem.item.ano} 
         onPress={abrirDetalhe} />
       )
     }
